@@ -1,0 +1,22 @@
+find the max number of dofs per core and set it as fixed for the rest of the study
+
+mpiexec -n 8 bind-to user:0,1,2,3,4,5,6,7 ./demo_poisson --ndofs=10000
+
+Combinations of cores to study : 
+4 bigs 
+4 smalls
+1+1
+2+2
+3+3
+4+4
+
+Phases to time : FunctionSpace, Assembly, Solve (Mesh is optionnal because it takes a lot of time)
+
+Python script : reuse plot_study_one and the idea of iterating throuh a for loop with a list of the different cores combinations to study
+Create appropriate strings to generate the command 
+Run the command
+Save to an xml
+Generate the plot with pandas, matplotlib & seaborn
+
+Do a GIT repo to save everything
+
