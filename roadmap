@@ -1,6 +1,6 @@
 find the max number of dofs per core and set it as fixed for the rest of the study
 
-mpiexec -n 8 bind-to user:0,1,2,3,4,5,6,7 ./demo_poisson --ndofs=10000
+'mpiexec -n 8 -bind-to user:0,1,2,3,4,5,6,7 ./demo_poisson --ndofs=124250 --xmlname=name'
 
 Combinations of cores to study : 
 4 bigs 

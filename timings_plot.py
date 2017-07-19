@@ -1,4 +1,7 @@
+#This script can bu used to plot various results 
+#From the weak-scaling study.
 from __future__ import print_function
+from subprocess import call
 
 import numpy as np 
 import seaborn as sns
@@ -33,17 +36,42 @@ def convert_table_to_dataframe(filename):
 
     return df
 
+#CPU combinations to be studied.
+cores_combinations = ["0,1,2,3,4,5,6,7", "0,1,2,3", "4,5,6,7", "0,4", "0,1,4,5", "0,1,2,4,5,6"]
+cores_number = [8, 4, 4, 2, 4, 6]
 
-tolerances = np.logspace(-1, -5, num=5)
+#Generate the appropriate command for the weak-scaling test and then run it.
+#The number of dofs is constant and fixed to 124 250 (maximum value without crashing).
 
-rapod_timings = [convert_table_to_dataframe("output/study_one/rapod_{}.xml".format(i)) for i in range(0, len(tolerances))]
+command = "mpiexec -n " + cores_number[0] + " -bind-to user:" + cores_combinations[0] + " ./demo_poisson --ndofs=124250 --xmlname=" + cores_combinations[0]
+call(["echo", command])
 
-times = np.zeros_like(tolerances)
-for i, rapod_timing in enumerate(rapod_timings):
-    times[i] = rapod_timing.loc['wall tot']['Total']
+#Extracting results from the xml files.
+timings = [convert_table_to_dataframe("output/study_one/timings_{}.xml".format(i)) for i in range(0, len(cores_combinations))]
 
-pod_timings = convert_table_to_dataframe("output/study_one/pod.xml")
-pod_time = float(pod_timings.loc['wall tot']['Total'])
+#Extract FunctionSpace timings.
+func_spaces_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    func_spaces_times[i] = float(timings.loc['wall tot']['ZZZ FunctionSpace'])
+
+#Extract Assemble timings.
+assemble_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    assemble_times[i] = float(timings.loc['wall tot']['ZZZ Assemble'])
+
+#Extract Solve timings.
+solve_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    solve_times[i] = float(timings.loc['wall tot']['ZZZ Solve'])
+
+#Extract Total timings.
+total_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    total_times[i] = float(timings.loc['wall tot']['ZZZ Total'])
+
+
+#NOT MODIFIED UNDER THIS LINE YET
+#-------------------------------------------------
 
 sns.set_context("paper")
 colors = sns.color_palette("muted")
