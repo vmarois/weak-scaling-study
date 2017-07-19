@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
   application_parameters.add("output", "vtk");
   application_parameters.add("output_dir", ".");
   application_parameters.add("dim", 3);
+  application_parameters.add("xmlname", "");
   application_parameters.parse(argc, argv);
   const std::string preconditioner = application_parameters["pc"];
   const std::string solver_type = application_parameters["solver"];
@@ -82,6 +83,7 @@ int main(int argc, char *argv[])
   const std::string output_dir = application_parameters["output_dir"];
   const std::size_t ndofs = application_parameters["ndofs"];
   const std::size_t dim = application_parameters["dim"];
+  const std::string xmlname = application_parameters["xmlname"];
 
   parameters["mesh_partitioner"] = "ParMETIS";
 
@@ -353,11 +355,11 @@ int main(int argc, char *argv[])
   t6.stop();
   t7.stop();
 
-  std::string filename = output_dir + "/timings.xml";
+  std::string filename = output_dir + "/timings_" + xmlname + ".xml";
 
   //Save timings to an XML file
   if (MPI::rank(mesh->mpi_comm()) == 0)
-  	{File file(MPI_COMM_WORLD, filename);
+  	{File file(MPI_COMM_SELF, filename);
      	Table t = timings(TimingClear::clear, {TimingType::wall});
     	file << t;}
 
