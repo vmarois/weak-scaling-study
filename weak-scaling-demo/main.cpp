@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
 
   parameters["mesh_partitioner"] = "ParMETIS";
 
+  Timer t7("ZZZ Total");
   Timer t0("ZZZ Create Mesh");
 
   // Get number of processes
@@ -350,6 +351,7 @@ int main(int argc, char *argv[])
   }
   
   t6.stop();
+  t7.stop();
 
   std::string filename = output_dir + "/timings.xml";
 
