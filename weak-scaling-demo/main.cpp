@@ -353,6 +353,12 @@ int main(int argc, char *argv[])
 
   std::string filename = output_dir + "/timings.xml";
 
+  //Save timings to an XML file
+  if (MPI::rank(mesh->mpi_comm()) == 0)
+  	{File file(MPI_COMM_WORLD, filename);
+     	Table t = timings(TimingClear::clear, {TimingType::wall});
+    	file << t;}
+
   list_timings(TimingClear::clear, {TimingType::wall});
 
   return 0;
