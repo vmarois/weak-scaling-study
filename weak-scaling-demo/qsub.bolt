@@ -1,0 +1,24 @@
+#!/bin/bash --login
+#
+# Parallel script produced by bolt
+#        Resource: ARCHER (Cray XC30 (24-core per node))
+#    Batch system: PBSPro_select
+#
+# bolt is written by EPCC (http://www.epcc.ed.ac.uk)
+#
+#PBS -l select=2
+#PBS -N FEniCS-bm
+#PBS -A account-code
+#PBS -l walltime=0:20:0
+#PBS -q short
+
+# Switch to current working directory
+cd $PBS_O_WORKDIR
+
+module load dolfin/dev
+
+# Run the parallel program
+aprun -n $NUM_PES -N 24 -S 12 -d 1 ./demo_poisson
+
+
+
