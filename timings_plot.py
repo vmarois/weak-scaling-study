@@ -9,7 +9,7 @@ import xmltodict
 import pandas as pd
 
 def convert_table_to_dataframe(filename):
-    with open(filename) as f:
+    with open(filename, "rb") as f:
         d = xmltodict.parse(f)
 
     d = d["dolfin"]["table"]["row"]
@@ -36,30 +36,26 @@ directory = os.path.join(os.getcwd(), 'weak-scaling-demo', 'xmlfiles')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
-#CPU combinations to be studied.
-cores_combinations = ["0,1,2,3,4,5,6,7", "0,1,2,3", "4,5,6,7", "0,4", "0,1,4,5", "0,1,2,4,5,6"]
-cores_number = ["8", "4", "4", "2", "4", "6"]
+# CPU combinations to be studied.
+cores_combinations = [ range(0, 8), range(0, 4), range(4, 8), [0,4], [0,1,4,5], [0,1,2,4,5,6]]
+cores_number = [len(x) for x in cores_combinations]
 
-#Extracting results from the xml files.
+def cores_to_str(cores_combination):
+    string = ""
+    for i, core in enumerate(cores_combination):
+        string += str(core)
+        if not i == len(cores_combination) - 1:
+            string += ","
+
+    return string
+
+print(cores_combination_to_str(cores_combinations[0]))
+
+function_spaces = np.zeros(len(cores_combinations))
+
+# Extracting results from the xml files.
 for i in range(0, len(cores_combinations)):
-        timings = convert_table_to_dataframe("weak-scaling-demo/xmlfiles/timings_{}.xml".format(cores_combinations[i]))
-        func_spaces_times = np.zeros_like(timings)
-        for j, timing in enumerate(timings):
-                func_spaces_times[j] = timing.loc['wall tot']['ZZZ FunctionSpace']
+    timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
+    function_spaces[i] = timings.loc["wall tot"]["ZZZ Total"]
 
-        print(func_spaces_times)
-
-#Extract Assemble timings.
-#assemble_times = np.zeros_like(timings)
-#for i, timings in enumerate(timings):
-#    assemble_times[i] = float(timings.loc['wall tot']['ZZZ Assemble'])
-
-#Extract Solve timings.
-#solve_times = np.zeros_like(timings)
-#for i, timings in enumerate(timings):
-#    solve_times[i] = float(timings.loc['wall tot']['ZZZ Solve'])
-
-#Extract Total timings.
-#total_times = np.zeros_like(timings)
-#for i, timings in enumerate(timings):
-#    total_times[i] = float(timings.loc['wall tot']['ZZZ Total'])
+print(function_spaces)
