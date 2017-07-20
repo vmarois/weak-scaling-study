@@ -32,9 +32,9 @@ def convert_table_to_dataframe(filename):
 
     return df
 
-path = os.getcwd() + "/weak-scaling-demo"
-os.chdir(path)
-os.system("mkdir xmlfiles")
+directory = os.path.join(os.getcwd(), 'weak-scaling-demo', 'xmlfiles')
+if not os.path.exists(directory):
+    os.mkdir(directory)
 
 #CPU combinations to be studied.
 cores_combinations = ["0,1,2,3,4,5,6,7", "0,1,2,3", "4,5,6,7", "0,4", "0,1,4,5", "0,1,2,4,5,6"]
@@ -43,7 +43,7 @@ cores_number = ["8", "4", "4", "2", "4", "6"]
 #Generate the appropriate command for the weak-scaling test and then run it.
 #The number of dofs is constant and fixed to 124 250 (maximum value without crashing).
 for i in range(len(cores_combinations)):
-	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_combinations[i] + " ./demo_poisson --ndofs=120000 --xmlname=" + cores_combinations[i]
+	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_combinations[i] + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_combinations[i]
 	os.system(command)
 
 #Extracting results from the xml files.
