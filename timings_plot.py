@@ -42,12 +42,12 @@ cores_number = ["8", "4", "4", "2", "4", "6"]
 
 #Generate the appropriate command for the weak-scaling test and then run it.
 #The number of dofs is constant and fixed to 124 250 (maximum value without crashing).
-for i in range(0, len(cores_combinations)):
+for i in range(len(cores_combinations)):
 	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_combinations[i] + " ./demo_poisson --ndofs=124250 --xmlname=" + cores_combinations[i]
 	os.system(command)
 
 #Extracting results from the xml files.
-timings = [convert_table_to_dataframe("weak_scaling_study/xmlfiles/timings_{}.xml".format(cores_combinations[i])) for i in range(0, len(cores_combinations))]
+timings = [convert_table_to_dataframe("weak_scaling_study/weak-scaling-demo/xmlfiles/timings_{}.xml".format(cores_combinations[i])) for i in range(0, len(cores_combinations))]
 
 #Extract FunctionSpace timings.
 func_spaces_times = np.zeros_like(timings)
