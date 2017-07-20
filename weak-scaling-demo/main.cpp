@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
   t6.stop();
   t7.stop();
 
-  std::string filename = output_dir + "/timings_" + xmlname + ".xml";
+  std::string filename = output_dir + "/xmlfiles/timings_" + xmlname + ".xml";
 
   //Save timings to an XML file
   if (MPI::rank(mesh->mpi_comm()) == 0)
