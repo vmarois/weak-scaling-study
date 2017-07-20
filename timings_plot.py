@@ -47,7 +47,13 @@ for i in range(len(cores_combinations)):
 	os.system(command)
 
 #Extracting results from the xml files.
-timings = [convert_table_to_dataframe("weak_scaling_study/weak-scaling-demo/xmlfiles/timings_{}.xml".format(cores_combinations[i])) for i in range(0, len(cores_combinations))]
+for i in range(0, len(cores_combinations)):
+        timings = convert_table_to_dataframe("weak-scaling-demo/xmlfiles/timings_{}.xml".format(cores_combinations[i]))
+        func_spaces_times = np.zeros_like(timings)
+        for j, timing in enumerate(timings):
+                func_spaces_times[j] = timing.loc['wall tot']['ZZZ FunctionSpace']
+
+        print(func_spaces_times)
 
 #Extract FunctionSpace timings.
 func_spaces_times = np.zeros_like(timings)
