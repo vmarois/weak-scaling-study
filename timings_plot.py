@@ -1,9 +1,11 @@
-#This script can bu used to plot various results 
+#This script can be used to plot various results 
 #From the weak-scaling study.
 from __future__ import print_function
 import os
 
 import numpy as np 
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 import xmltodict
 import pandas as pd
@@ -49,8 +51,6 @@ def cores_to_str(cores_combination):
 
     return string
 
-print(cores_combination_to_str(cores_combinations[0]))
-
 function_spaces = np.zeros(len(cores_combinations))
 
 # Extracting results from the xml files.
@@ -59,3 +59,13 @@ for i in range(0, len(cores_combinations)):
     function_spaces[i] = timings.loc["wall tot"]["ZZZ Total"]
 
 print(function_spaces)
+
+sns.set_context("paper")
+colors = sns.color_palette("muted")
+
+cores = ['8 cores', '4 smalls', '4 bigs', '1 + 1', '2 + 2', '3 + 3']
+fig, ax  = plt.subplots(figsize=(3, 2.2))
+sns.barplot(function_spaces,cores) 
+plt.xlabel(r"wall time (s)")
+plt.ylabel(r"cores combination")
+plt.savefig("total_times.pdf", bbox_inches='tight')
