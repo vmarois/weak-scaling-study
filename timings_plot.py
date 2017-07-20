@@ -3,6 +3,35 @@
 from __future__ import print_function
 import os
 
+import numpy as np 
+
+import xmltodict
+import pandas as pd
+
+def convert_table_to_dataframe(filename):
+    with open(filename) as f:
+        d = xmltodict.parse(f)
+
+    d = d["dolfin"]["table"]["row"]
+
+    d_new = {}
+
+    for row in d:
+        operation = row["@key"]
+        d_new[operation] = {}
+        for col in row["col"]:
+            key = col["@key"]
+            value = col["@value"]
+            if key == "reps":
+                d_new[operation][key] = int(value)
+            else:
+                d_new[operation][key] = float(value)
+
+
+    df = pd.DataFrame(d_new)
+
+    return df
+
 path = os.getcwd() + "/weak-scaling-demo"
 os.chdir(path)
 os.system("mkdir xmlfiles")
@@ -16,3 +45,26 @@ cores_number = [8, 4, 4, 2, 4, 6]
 for i in range(0, len(cores_combinations)):
 	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_combinations[i] + " ./demo_poisson --ndofs=124250 --xmlname=" + cores_combinations[i]
 	os.system(command)
+
+#Extracting results from the xml files.
+timings = [convert_table_to_dataframe("weak_scaling_study/xmlfiles/timings_{}.xml".format(cores_combinations[i])) for i in range(0, len(cores_combinations))]
+
+#Extract FunctionSpace timings.
+func_spaces_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    func_spaces_times[i] = float(timings.loc['wall tot']['ZZZ FunctionSpace'])
+
+#Extract Assemble timings.
+assemble_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    assemble_times[i] = float(timings.loc['wall tot']['ZZZ Assemble'])
+
+#Extract Solve timings.
+solve_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    solve_times[i] = float(timings.loc['wall tot']['ZZZ Solve'])
+
+#Extract Total timings.
+total_times = np.zeros_like(timings)
+for i, timings in enumerate(timings):
+    total_times[i] = float(timings.loc['wall tot']['ZZZ Total'])
