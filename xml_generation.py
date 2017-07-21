@@ -1,11 +1,16 @@
-#This script runs a series of weak-scaling
-#tests to generate xml files for future plotting.
-from __future__ import print_function
+# This script runs a series of weak-scaling
+# tests and outputs the results to xml files.
+
 import os
 
 # CPU combinations to be studied.
 cores_combinations = [ range(0, 8), range(0, 4), range(4, 8), [0,4], [0,1,4,5], [0,1,2,4,5,6]]
 cores_number = [len(x) for x in cores_combinations]
+
+# Create directory to store generated xml files.
+directory = os.path.join(os.getcwd(), 'weak-scaling-demo', 'xmlfiles')
+if not os.path.exists(directory):
+    os.mkdir(directory)
 
 def cores_to_str(cores_combination):
     string = ""
@@ -19,6 +24,6 @@ def cores_to_str(cores_combination):
 #Generate the appropriate command for the weak-scaling test and then run it.
 #The number of dofs is constant and fixed to 120000 (maximum value without crashing).
 for i in range(len(cores_combinations)):
-	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_combinations[i]
+	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_to_str(cores_combinations[i])
 	os.system(command)
 
