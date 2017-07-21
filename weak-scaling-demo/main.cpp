@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
   if (output == "vtk")
   {
     //  Save solution in VTK format
-    std::string filename = output_dir + "/poisson-"
+    std::string filename = output_dir + "/output/poisson-"
       + std::to_string(ncores) + ".pvd";
     File file(filename);
     file << u;
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
   else if (output == "xdmf")
   {
     //  Save solution in XDMF format
-    std::string filename = output_dir + "/poisson-"
+    std::string filename = output_dir + "/output/poisson-"
       + std::to_string(ncores) + ".xdmf";
     XDMFFile file(filename);
     file.write(u);

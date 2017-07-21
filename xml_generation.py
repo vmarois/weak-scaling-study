@@ -8,7 +8,12 @@ cores_combinations = [ range(0, 8), range(0, 4), range(4, 8), [0,4], [0,1,4,5], 
 cores_number = [len(x) for x in cores_combinations]
 
 # Create directory to store generated xml files.
-directory = os.path.join(os.getcwd(), 'weak-scaling-demo', 'xmlfiles')
+directory = os.path.join(os.getcwd(), 'xmlfiles')
+if not os.path.exists(directory):
+    os.mkdir(directory)
+
+# Create directory to store outputs files (*pvd, *.pvtu *.xdmf, *.vtu)
+directory = os.path.join(os.getcwd(), 'output')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
