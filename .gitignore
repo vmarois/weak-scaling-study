@@ -1,0 +1,14 @@
+# Data files
+*.pvd
+*.pvtu
+*.vtu
+*.h5
+*.xdmf
+*.bin
+
+# Xml files
+
+xmlfiles/
+
+# Created plots
+*.pdf
