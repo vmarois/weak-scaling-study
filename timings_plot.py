@@ -86,7 +86,7 @@ colors = sns.color_palette("muted")
 
 cores = ['8 cores', '4 smalls', '4 bigs', '1 + 1', '2 + 2', '3 + 3']
 fig, ax  = plt.subplots(figsize=(3, 2.2))
-sns.barplot(function_spaces,cores) 
+sns.barplot(function_space,cores) 
 plt.xlabel(r"wall time (s)")
 plt.ylabel(r"cores combination")
 plt.savefig("pdf/function_spaces.pdf", bbox_inches='tight')
