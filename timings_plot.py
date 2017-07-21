@@ -69,7 +69,7 @@ for i in range(0, len(cores_combinations)):
 
 # Print some results.
 print("FunctionSpace timings : ")
-print(function_spaces)
+print(function_space)
 
 print("Assemble timings : ")
 print(assemble)
