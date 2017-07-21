@@ -17,12 +17,13 @@ For now, we are focusing on studying the time taken to complete the `weak-scalin
 ## Build
 
 You'll first need to build the `weak-scaling-demo` test :
-	cd weak-scaling-demo
-	ffc -l dolfin Poisson.ufl
-	mkdir build
-	cd build
-	cmake ../
-	make
+
+    cd weak-scaling-demo
+    ffc -l dolfin Poisson.ufl
+    mkdir build
+    cd build
+    cmake ../
+    make
 
 After the build is complete, you can use the following `python` scripts :
 
