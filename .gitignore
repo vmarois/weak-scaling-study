@@ -11,6 +11,7 @@ xmlfiles/
 
 # Created plots
 *.pdf
+pdf/
 
 # Outputs files
 output/
