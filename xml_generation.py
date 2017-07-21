@@ -24,6 +24,6 @@ def cores_to_str(cores_combination):
 #Generate the appropriate command for the weak-scaling test and then run it.
 #The number of dofs is constant and fixed to 120000 (maximum value without crashing).
 for i in range(len(cores_combinations)):
-	command = "mpiexec -n " + cores_number[i] + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_to_str(cores_combinations[i])
+	command = "mpiexec -n " + str(cores_number[i]) + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_to_str(cores_combinations[i])
 	os.system(command)
 
