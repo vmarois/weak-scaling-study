@@ -35,6 +35,11 @@ def convert_table_to_dataframe(filename):
 
     return df
 
+# Create directory to store pdf files
+directory = os.path.join(os.getcwd(), 'pdf')
+if not os.path.exists(directory):
+    os.mkdir(directory)
+
 # CPU combinations to be studied.
 cores_combinations = [ range(0, 8), range(0, 4), range(4, 8), [0,4], [0,1,4,5], [0,1,2,4,5,6]]
 cores_number = [len(x) for x in cores_combinations]
@@ -84,5 +89,5 @@ fig, ax  = plt.subplots(figsize=(3, 2.2))
 sns.barplot(function_spaces,cores) 
 plt.xlabel(r"wall time (s)")
 plt.ylabel(r"cores combination")
-plt.savefig("total_times.pdf", bbox_inches='tight')
+plt.savefig("pdf/function_spaces.pdf", bbox_inches='tight')
 print("Done. Results have been outputted to PDF.")
