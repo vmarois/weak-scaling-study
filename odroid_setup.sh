@@ -15,7 +15,7 @@ echo '{
 ' > /etc/docker/daemon.json
 echo "Adding a group 'docker', and adding the user to that group. Allows running Docker commands without specifying sudo first." 
 sudo groupadd docker
-sudo usermode -aG docker $USER
+sudo usermod -aG docker $USER
 echo "Cloning https://vincentmarois@bitbucket.org/vincentmarois/docker.git"
 git clone https://vincentmarois@bitbucket.org/vincentmarois/docker.git
 git checkout jackhale/feature-armhf-support
