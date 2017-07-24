@@ -77,6 +77,7 @@ print("DataFrame object has been created.")
 sns.set_context("paper")
 colors = sns.color_palette("muted")
 ax = sns.barplot(x='Cores', y='Timing', hue='Stages', data=df, palette=colors)
+ax.set_title('Different Stages Timings')
 
 # Add timing values above bars in plot.
 for p in ax.patches:
