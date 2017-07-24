@@ -35,7 +35,7 @@ def convert_table_to_dataframe(filename):
 
     return df
 
-# Create directory to store pdf files
+# Create directory to store pdf files.
 directory = os.path.join(os.getcwd(), 'pdf')
 if not os.path.exists(directory):
     os.mkdir(directory)
@@ -53,7 +53,7 @@ def cores_to_str(cores_combination):
 
     return string
 
-# Data definition.
+# Define lists used for data management.
 labels = ['8 cores', '4 smalls', '4 bigs', '1 + 1', '2 + 2', '3 + 3']
 steps = ['Assemble', 'FunctionSpace', 'Solve', 'Total']
 cores = [None] * (len(cores_combinations) * len(steps))
@@ -70,6 +70,7 @@ for i, label in enumerate(labels):
 
 print("Results have been extracted.")
 
+# Define DataFrame object.
 df = pd.DataFrame({'Cores': cores, 'Stages': stages, 'Timing': values}, columns = ['Cores', 'Stages', 'Timing'])
 print("DataFrame object has been created.")
 
@@ -77,13 +78,15 @@ sns.set_context("paper")
 colors = sns.color_palette("muted")
 ax = sns.barplot(x='Cores', y='Timing', hue='Stages', data=df, palette=colors)
 
+# Add timing values above bars in plot.
 for p in ax.patches:
     height = p.get_height()
     ax.text(p.get_x()+p.get_width()/2., 1.05*height,
                 '%d' % int(height),
                 ha='center', va='bottom') 
 
+# Layout & save plot.
 plt.xlabel(r"Core combinations")
 plt.ylabel(r"Wall time (s)")
-plt.savefig("pdf/test.pdf", bbox_inches='tight')
+plt.savefig("pdf/total_&_stages_timings.pdf", bbox_inches='tight')
 print("Done, plot has been saved to pdf.")
