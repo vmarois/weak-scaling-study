@@ -88,7 +88,7 @@ df1 = pd.DataFrame({'Cores': cores, 'Stages': stages, 'Timing': timings}, column
 print("DataFrame object (steps timings) has been created.")
 
 # Define DataFrame object for the efficiency plot.
-df2 = pd.DataFrame({'Processes': processes, 'Percentages': perc}, columns = ['Processes', 'Percentages'])
+df2 = pd.DataFrame({'Processes': cores_number, 'Percentages': perc}, columns = ['Processes', 'Percentages'])
 print("DataFrame object (efficiency) has been created.")
 
 # Plot the different steps timings.
