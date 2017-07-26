@@ -51,10 +51,10 @@ if not os.path.exists(directory):
 
 # CPU combinations to be studied.
 cores_combinations = [ [0,4], [0,1,4,5], [0,1,2,4,5,6], range(0,8)]
-cores_number = [len(x) for x in cores_combinations]
+labels = ['1 + 1', '2 + 2', '3 + 3', 'All 8 cores']
 
-# Define the range of processes covered & the steps to extract from the workload.
-processes = ['1 + 1', '2 + 2', '3 + 3', 'All 8 cores']
+# Define the number of processes to run & the steps to extract from the workload.
+cores_number = [len(x) for x in cores_combinations]
 steps = ['Assemble', 'FunctionSpace', 'Solve', 'Total']
 
 # Define variables to plot the different steps timings in function of the number of processes.
@@ -67,10 +67,10 @@ temp_perc = np.zeros(len(cores_combinations))
 perc = np.zeros(len(cores_combinations))
 
 # Extracting results from the xml files, and storing them in the appropriate variables.
-for i, proc in enumerate(processes):
+for i, label in enumerate(labels):
     raw_timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
     for j, step in enumerate(steps):
-        cores[i*len(steps) + j] = proc
+        cores[i*len(steps) + j] = label
         stages[i*len(steps) + j] = step
         timings[i*len(steps) + j] = raw_timings.loc["wall tot"]["ZZZ {}".format(step)]
         # Sum the timings of the steps and store them in temp_perc.

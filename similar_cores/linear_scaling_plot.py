@@ -52,10 +52,10 @@ if not os.path.exists(directory):
 
 # CPU combinations to be studied.
 cores_combinations = [ range(0, 1), range(0, 2), range(0, 3), range(0, 4), range(0, 5), range(0, 6), range(0, 7), range(0, 8)]
-cores_number = [len(x) for x in cores_combinations]
+labels = range(1,9)
 
-# Define the range of processes covered & the steps to extract from the workload.
-processes = range(1,9)
+# Define the number of processes to run & the steps to extract from the workload.
+cores_number = [len(x) for x in cores_combinations]
 steps = ['Assemble', 'FunctionSpace', 'Solve', 'Total']
 
 # Define variables to plot the different steps timings in function of the number of processes.
@@ -68,11 +68,11 @@ temp_perc = np.zeros(len(cores_combinations))
 perc = np.zeros(len(cores_combinations))
 
 # Extracting results from the xml files, and storing them in the appropriate variables.
-for i, proc in enumerate(processes):
+for i, label in enumerate(labels):
     raw_timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
     for j, step in enumerate(steps):
         # Order the labels and timings for a proper grouped barplot.
-        cores[i*len(steps) + j] = proc
+        cores[i*len(steps) + j] = label
         stages[i*len(steps) + j] = step
         timings[i*len(steps) + j] = raw_timings.loc["wall tot"]["ZZZ {}".format(step)]
         # Sum the timings of the steps and store them in temp_perc.
@@ -90,7 +90,7 @@ df1 = pd.DataFrame({'Cores': cores, 'Stages': stages, 'Timing': timings}, column
 print("DataFrame object (steps timings) has been created.")
 
 # Define DataFrame object for the efficiency plot.
-df2 = pd.DataFrame({'Processes': processes, 'Percentages': perc}, columns = ['Processes', 'Percentages'])
+df2 = pd.DataFrame({'Processes': labels, 'Percentages': perc}, columns = ['Processes', 'Percentages'])
 print("DataFrame object (efficiency) has been created.")
 
 # Plot the different steps timings.
