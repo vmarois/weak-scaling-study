@@ -114,7 +114,7 @@ plt.clf()
 sns.set()
 ax2 = sns.regplot(x='Processes', y='Percentages', data=df2)
 ax2.set_title('Weak Scaling Efficiency Plot\n'
-     'on fabrezan')
+     'on odroid')
 #Layout & save plot.
 plt.xlabel(r"Number of processes")
 plt.ylabel(r"Efficiency (%)")
