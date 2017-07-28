@@ -363,6 +363,18 @@ int main(int argc, char *argv[])
      	Table t = timings(TimingClear::clear, {TimingType::wall});
     	file << t;}
 
+  //Save ndofs per core & total to an xml file
+  std::string dofs_filename = output_dir + "/xmlfiles/dofs_" + xmlname + ".xml";
+  
+  if(MPI::rank(mesh->mpi_comm()) == 0)
+  	{File dofsfile(MPI_COMM_SELF, dofs_filename);
+  	 Table dofsvalue("weak-scaling-dofs");
+	 dofsvalue.set("Total", "ndofs", (V->dim()));
+         dofsvalue.set("Total", "reps", 1);
+	 dofsvalue.set("Per core", "ndofs", (V->dim()/MPI::size(mesh->mpi_comm())));
+	 dofsvalue.set("Per core", "reps", 1);
+  	 dofsfile << dofsvalue;}
+
   list_timings(TimingClear::clear, {TimingType::wall});
 
   return 0;
