@@ -114,7 +114,7 @@ print("DataFrame object (efficiency) has been created.")
 sns.set_context("paper")
 colors = sns.color_palette("muted")
 
-# Plot the ndfofs total & per core.
+# Plot the ndofs total & per core.
 ax0 = sns.barplot(x='Processes', y='Ndofs', hue='Type', data=df0)
 ax0.set_title('Evolution of ndofs with the number of processes.')
 #Layout & save plot.
