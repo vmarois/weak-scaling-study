@@ -67,9 +67,23 @@ timings = np.zeros(len(cores_combinations) * len(steps))
 temp_perc = np.zeros(len(cores_combinations))
 perc = np.zeros(len(cores_combinations))
 
+# Define variable to store the number of dofs per core.
+ndofsprocesses = np.zeros(2 * len(cores_combinations))
+ndofslabel = [None] * (2 * len(cores_combinations))
+ndofs = np.zeros(2 * len(cores_combinations))
+ndoftypes = ['Per core', 'Total']
+
 # Extracting results from the xml files, and storing them in the appropriate variables.
 for i, label in enumerate(labels):
+    
     raw_timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
+    raw_ndofs = convert_table_to_dataframe("xmlfiles/dofs_{}.xml".format(cores_to_str(cores_combinations[i])))
+
+    for k, ndoftype in enumerate(ndoftypes):
+        ndofs[i * len(ndoftypes) + k] = raw_ndofs.loc["ndofs"]["{}".format(ndoftype)]
+        ndofslabel[i * len(ndoftypes) + k] = ndoftype
+        ndofsprocesses[i * len(ndoftypes) + k] = len(cores_combinations[i])
+
     for j, step in enumerate(steps):
         # Order the labels and timings for a proper grouped barplot.
         cores[i*len(steps) + j] = label
@@ -85,6 +99,10 @@ for i, label in enumerate(labels):
 
 print("Results have been extracted.")
 
+# Define DataFrame object for the ndofs & total per core plot.
+df0 = pd.DataFrame({'Processes': ndofsprocesses, 'Type': ndofslabel, 'Ndofs': ndofs}, columns = ['Processes', 'Type', 'Ndofs'])
+print("DataFrame object (dofs) has been created.")
+
 # Define DataFrame object for the different steps timings plot.
 df1 = pd.DataFrame({'Cores': cores, 'Stages': stages, 'Timing': timings}, columns = ['Cores', 'Stages', 'Timing'])
 print("DataFrame object (steps timings) has been created.")
@@ -93,9 +111,21 @@ print("DataFrame object (steps timings) has been created.")
 df2 = pd.DataFrame({'Processes': labels, 'Percentages': perc}, columns = ['Processes', 'Percentages'])
 print("DataFrame object (efficiency) has been created.")
 
-# Plot the different steps timings.
 sns.set_context("paper")
 colors = sns.color_palette("muted")
+
+# Plot the ndfofs total & per core.
+ax0 = sns.barplot(x='Processes', y='Ndofs', hue='Type', data=df0)
+ax0.set_title('Evolution of ndofs with the number of processes.')
+#Layout & save plot.
+plt.xlabel(r"Number of processes")
+plt.ylabel(r"Number of degrees of freedom")
+plt.savefig("pdf/dofs_plot.pdf", bbox_inches='tight')
+print("Done, 'dofs_plot' saved to pdf.")
+#Clear matplotlib.pyplot.
+plt.clf()
+
+# Plot the different steps timings.
 ax1 = sns.barplot(x='Cores', y='Timing', hue='Stages', data=df1, palette=colors)
 ax1.set_title('Linear Scaling Verification')
 #Add timing values above bars in plot.
