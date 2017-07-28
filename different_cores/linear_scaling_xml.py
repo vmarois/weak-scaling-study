@@ -7,13 +7,23 @@ import os
 cores_combinations = [ [0,4], [0,1,4,5], [0,1,2,4,5,6], range(0,8)]
 cores_number = [len(x) for x in cores_combinations]
 
-# Create directory to store generated xml files.
-directory = os.path.join(os.getcwd(), 'xmlfiles')
+# Create directory to store generated files.
+directory = os.path.join(os.getcwd(), 'output')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
-# Create directory to store outputs files (*pvd, *.pvtu *.xdmf, *.vtu)
-directory = os.path.join(os.getcwd(), 'output')
+# Create directory to store generated timings xml files.
+directory = os.path.join(os.getcwd(), 'output/timings')
+if not os.path.exists(directory):
+    os.mkdir(directory)
+
+# Create directory to store generated ndofs xml files.
+directory = os.path.join(os.getcwd(), 'output/dofs')
+if not os.path.exists(directory):
+    os.mkdir(directory)
+
+# Create directory to store other outputs files (*pvd, *.pvtu *.xdmf, *.vtu)
+directory = os.path.join(os.getcwd(), 'output/others')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
@@ -29,7 +39,7 @@ def cores_to_str(cores_combination):
 #Generate the appropriate command for the weak-scaling test and then run it.
 #The number of dofs is constant and fixed to 120000 (maximum value without crashing).
 for i in range(len(cores_combinations)):
-    filename = os.path.join(os.getcwd(), 'xmlfiles', 'timings_{}'.format(cores_to_str(cores_combinations[i])))
+    filename = os.path.join(os.getcwd(), 'output/timings/timings_{}'.format(cores_to_str(cores_combinations[i])))
     # Check if the corresponding xmlfile already exists, and if yes skip the command.
     if not os.path.isfile(filename):
         command = "mpiexec -n " + str(cores_number[i]) + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_to_str(cores_combinations[i])

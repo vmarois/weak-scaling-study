@@ -45,7 +45,7 @@ def cores_to_str(cores_combination):
     return string
 
 # Create directory to store pdf files.
-directory = os.path.join(os.getcwd(), 'pdf')
+directory = os.path.join(os.getcwd(), 'output/pdf')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
@@ -68,7 +68,7 @@ perc = np.zeros(len(cores_combinations))
 
 # Extracting results from the xml files, and storing them in the appropriate variables.
 for i, label in enumerate(labels):
-    raw_timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
+    raw_timings = convert_table_to_dataframe("output/timings/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
     for j, step in enumerate(steps):
         cores[i*len(steps) + j] = label
         stages[i*len(steps) + j] = step
@@ -105,7 +105,7 @@ for p in ax1.patches:
 #Layout & save plot.
 plt.xlabel(r"Number of processes")
 plt.ylabel(r"Wall time (s)")
-plt.savefig("pdf/steps_timings_plot.pdf", bbox_inches='tight')
+plt.savefig("output/pdf/steps_timings_plot.pdf", bbox_inches='tight')
 print("Done, 'steps_timings_plot' saved to pdf.")
 #Clear matplotlib.pyplot.
 plt.clf()
@@ -118,5 +118,5 @@ ax2.set_title('Weak Scaling Efficiency Plot\n'
 #Layout & save plot.
 plt.xlabel(r"Number of processes")
 plt.ylabel(r"Efficiency (%)")
-plt.savefig("pdf/weak_scaling_efficiency_plot.pdf", bbox_inches='tight')
+plt.savefig("output/pdf/weak_scaling_efficiency_plot.pdf", bbox_inches='tight')
 print("Done, 'weak_scaling_efficiency_plot' has been saved to pdf.")

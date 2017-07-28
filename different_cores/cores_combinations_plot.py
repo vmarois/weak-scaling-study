@@ -36,7 +36,7 @@ def convert_table_to_dataframe(filename):
     return df
 
 # Create directory to store pdf files.
-directory = os.path.join(os.getcwd(), 'pdf')
+directory = os.path.join(os.getcwd(), 'output/pdf')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
@@ -62,7 +62,7 @@ values = np.zeros(len(cores_combinations) * len(steps))
 
 # Extracting results from the xml files.
 for i, label in enumerate(labels):
-    timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
+    timings = convert_table_to_dataframe("output/timings/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
     for j, step in enumerate(steps):
         cores[i*len(steps) + j] = label
         stages[i*len(steps) + j] = step
@@ -89,5 +89,5 @@ for p in ax.patches:
 # Layout & save plot.
 plt.xlabel(r"Core combinations")
 plt.ylabel(r"Wall time (s)")
-plt.savefig("pdf/total_&_stages_timings.pdf", bbox_inches='tight')
-print("Done, plot has been saved to pdf.")
+plt.savefig("output/pdf/total_&_stages_timings.pdf", bbox_inches='tight')
+print("Done, 'total_&_stages_timings' has been saved to pdf.")

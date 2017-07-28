@@ -46,7 +46,7 @@ def cores_to_str(cores_combination):
     return string
 
 # Create directory to store pdf files.
-directory = os.path.join(os.getcwd(), 'pdf')
+directory = os.path.join(os.getcwd(), 'output/pdf')
 if not os.path.exists(directory):
     os.mkdir(directory)
 
@@ -76,8 +76,8 @@ ndoftypes = ['Per core', 'Total']
 # Extracting results from the xml files, and storing them in the appropriate variables.
 for i, label in enumerate(labels):
     
-    raw_timings = convert_table_to_dataframe("xmlfiles/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
-    raw_ndofs = convert_table_to_dataframe("xmlfiles/dofs_{}.xml".format(cores_to_str(cores_combinations[i])))
+    raw_timings = convert_table_to_dataframe("output/timings/timings_{}.xml".format(cores_to_str(cores_combinations[i])))
+    raw_ndofs = convert_table_to_dataframe("output/dofs/dofs_{}.xml".format(cores_to_str(cores_combinations[i])))
 
     for k, ndoftype in enumerate(ndoftypes):
         ndofs[i * len(ndoftypes) + k] = raw_ndofs.loc["ndofs"]["{}".format(ndoftype)]
@@ -120,7 +120,7 @@ ax0.set_title('Evolution of ndofs with the number of processes.')
 #Layout & save plot.
 plt.xlabel(r"Number of processes")
 plt.ylabel(r"Number of degrees of freedom")
-plt.savefig("pdf/dofs_plot.pdf", bbox_inches='tight')
+plt.savefig("output/pdf/dofs_plot.pdf", bbox_inches='tight')
 print("Done, 'dofs_plot' saved to pdf.")
 #Clear matplotlib.pyplot.
 plt.clf()
@@ -137,7 +137,7 @@ for p in ax1.patches:
 #Layout & save plot.
 plt.xlabel(r"Number of processes")
 plt.ylabel(r"Wall time (s)")
-plt.savefig("pdf/steps_timings_plot.pdf", bbox_inches='tight')
+plt.savefig("output/pdf/steps_timings_plot.pdf", bbox_inches='tight')
 print("Done, 'steps_timings_plot' saved to pdf.")
 #Clear matplotlib.pyplot.
 plt.clf()
@@ -150,5 +150,5 @@ ax2.set_title('Weak Scaling Efficiency Plot\n'
 #Layout & save plot.
 plt.xlabel(r"Number of processes")
 plt.ylabel(r"Efficiency (%)")
-plt.savefig("pdf/weak_scaling_efficiency_plot.pdf", bbox_inches='tight')
+plt.savefig("output/pdf/weak_scaling_efficiency_plot.pdf", bbox_inches='tight')
 print("Done, 'weak_scaling_efficiency_plot' has been saved to pdf.")

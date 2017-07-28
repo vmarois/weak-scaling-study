@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
   if (output == "vtk")
   {
     //  Save solution in VTK format
-    std::string filename = output_dir + "/output/poisson-"
+    std::string filename = output_dir + "/output/others/poisson-"
       + std::to_string(ncores) + ".pvd";
     File file(filename);
     file << u;
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
   else if (output == "xdmf")
   {
     //  Save solution in XDMF format
-    std::string filename = output_dir + "/output/poisson-"
+    std::string filename = output_dir + "/output/others/poisson-"
       + std::to_string(ncores) + ".xdmf";
     XDMFFile file(filename);
     file.write(u);
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
   t6.stop();
   t7.stop();
 
-  std::string filename = output_dir + "/xmlfiles/timings_" + xmlname + ".xml";
+  std::string filename = output_dir + "/output/timings/timings_" + xmlname + ".xml";
 
   //Save timings to an XML file
   if (MPI::rank(mesh->mpi_comm()) == 0)
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
     	file << t;}
 
   //Save ndofs per core & total to an xml file
-  std::string dofs_filename = output_dir + "/xmlfiles/dofs_" + xmlname + ".xml";
+  std::string dofs_filename = output_dir + "/output/dofs/dofs_" + xmlname + ".xml";
   
   if(MPI::rank(mesh->mpi_comm()) == 0)
   	{File dofsfile(MPI_COMM_SELF, dofs_filename);
