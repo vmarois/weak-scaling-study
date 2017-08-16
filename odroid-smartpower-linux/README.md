@@ -35,7 +35,7 @@ Easy-to-use C++ API for the smart power device.
 
 Installation:
 
-make lib
+	make lib
 
 Usage:
 
