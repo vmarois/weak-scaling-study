@@ -2,6 +2,7 @@
 # tests and outputs the results to xml files.
 
 import os
+import subprocess
 
 # CPU combinations to be studied.
 cores_combinations = [ range(0, 8), range(0, 4), range(4, 8), [0,4], [0,1,4,5], [0,1,2,4,5,6]]
@@ -36,13 +37,24 @@ def cores_to_str(cores_combination):
 
     return string
 
+wh =[]
+
 #Generate the appropriate command for the weak-scaling test and then run it.
 #The number of dofs is constant and fixed to 120000 (maximum value without crashing).
 for i in range(len(cores_combinations)):
     filename = os.path.join(os.getcwd(), 'output/timings/timings_{}'.format(cores_to_str(cores_combinations[i])))
     # Check if the corresponding xmlfile already exists, and if yes skip the command.
     if not os.path.isfile(filename):
-        command = "mpiexec -n " + str(cores_number[i]) + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_to_str(cores_combinations[i])
-        os.system(command)
+        init_meter = "sudo odroid-smartpower-linux/init"
+        generate_xml = "mpiexec -n " + str(cores_number[i]) + " -bind-to user:" + cores_to_str(cores_combinations[i]) + " weak-scaling-demo/build/demo_poisson --ndofs=120000 --xmlname=" + cores_to_str(cores_combinations[i])
+        get_watthour = "sudo odroid-smartpower-linux/watthour"
+        os.system(init_meter)
+        os.system(generate_xml)
+        wh.append(float(subprocess.getoutput(get_watthour)))
     else:
         print("There is already a file named timings_{}".format(cores_to_str(cores_combinations[i])) + ".xml. Skipping the corresponding command.")
+
+# Save watthour measures to a file for future plotting.
+f = open("output/wh_measures.txt", "w")
+f.write(str(wh))
+f.close()
