@@ -1,0 +1,6 @@
+# Ignore compiled files
+*.a
+*.o
+init
+smartpower
+watthour
