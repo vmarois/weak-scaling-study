@@ -1,5 +1,6 @@
-# This script outputs 2 plots as pdf: 
-# 'steps_timings_plot.pdf' showing the different steps timings in fct of the nb of processes,
+# This script outputs 3 plots as pdf: 
+# 'dofs_plot.pdf' showing the nb of degrees of freedom per core & in total in fct of the nb of proc,
+# 'steps_timings_plot.pdf' showing the different steps timings in fct of the nb of proc,
 # 'weak_scaling_efficiency_plot.pdf' showing the efficiency of the benchmark.
 
 from __future__ import print_function

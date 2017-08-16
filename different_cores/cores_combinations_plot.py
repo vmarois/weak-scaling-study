@@ -1,5 +1,5 @@
-# This script can be used to plot various results 
-# From the weak-scaling study.
+# This script outputs the different steps timings & the total one
+# in function of the different core combinations used.
 
 from __future__ import print_function
 import os

@@ -44,8 +44,8 @@ You can use the following command to  print some info about the CPUS of your mac
 
 Hence, in both folders, you'll find 2 scripts `linear_scaling_xml.py` & `linear_scaling_plot.py`:
 
-* The first one will run the benchmark, increasing each time the number of processes run (*in a balanced way, meaning that for processors with different cores, the number of processes on the small cores & on the big ones are always equal*). The results are outputted to xml files, stored in `/xmlfiles`.
-* The second script will produces 2 plots, by reading in the xml files produced : the timings of the various stages of the benchmark in function of the number of processes run, and the *efficiency* of the benchmark, as defined [here](https://www.sharcnet.ca/help/index.php/Measuring_Parallel_Scaling_Performance#Weak_Scaling).
+* The first one will run the benchmark, increasing each time the number of processes run (*in a balanced way, meaning that for processors with different cores, the number of processes on the small cores & on the big ones are always equal*). The results are outputted to `/output`. In this folder, you'll find xml files logging timings and the number of degrees of freedom (*dofs*), alongside the various other files (.pvd, .vtu etc).
+* The second script will produce 3 plots, by reading in the xml files produced : the evolution of the number of *dofs* with the number of processes, the timings of the various stages of the benchmark in function of the number of processes run, and the *efficiency* of the benchmark, as defined [here](https://www.sharcnet.ca/help/index.php/Measuring_Parallel_Scaling_Performance#Weak_Scaling).
 
 Finally, for the `different_cores` folder, you'll also find the scripts `cores_combinations_xml.py` & `cores_combinations_plot.py`, the first one running the benchmark using the different cores combinations specified (see example above), the second one plotting the timings of the different stages of the benchmark in function of the cores combinations used.
 The plots are saved as pdf, stored in `/pdf`.
