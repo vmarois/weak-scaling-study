@@ -1,33 +1,36 @@
-# This script outputs the different steps timings & the total one
-# in function of the different core combinations used.
+# This script generates several plots and save them to .pdf files:
+# - The timings of the various stages of demo_poisson wrt the cores combinations used,
+# - The energy consumed during demo_poisosn in functio of the cores combinations.
 
 from __future__ import print_function
 import os
 
 import numpy as np
 import seaborn as sns
-import matplotlib.pyplot as plt
+import matplotlib.py plot as plt
 
 import xmltodict
 import pandas as pd
 
+
 def file_to_float(filename):
-    '''Reads in a .txt file and converts the output into float.'''
+    """Reads in a .txt file and converts the output into float."""
     with open(filename, 'r') as f:
-        str = f.read()
+        string = f.read()
         f.close()
-        str = str[1:]
-        str = str[:-1]
-        str = str.split(',')
-        flt = list(map(float, str))
+        string = string[1:]
+        string = string[:-1]
+        string = string.split(',')
+        flt = list(map(float, string))
         return flt
 
+
 def convert_table_to_dataframe(filename):
+    """Converts filename (.xml) into a Pandas DataFrame."""
     with open(filename, "rb") as f:
         d = xmltodict.parse(f)
 
     d = d["dolfin"]["table"]["row"]
-
     d_new = {}
 
     for row in d:
@@ -41,12 +44,12 @@ def convert_table_to_dataframe(filename):
             else:
                 d_new[operation][key] = float(value)
 
-
     df = pd.DataFrame(d_new)
-
     return df
 
+
 def cores_to_str(cores_combination):
+    """ Concatenates a list of numbers into a string with ',' as separator."""
     string = ""
     for i, core in enumerate(cores_combination):
         string += str(core)
@@ -55,8 +58,9 @@ def cores_to_str(cores_combination):
 
     return string
 
+
 def add_value_to_plot(ax):
-    ''' Add the value above the bars.'''
+    """ Add the value above the bars."""
     for p in ax.patches:
         height = p.get_height()
         ax.text(p.get_x()+p.get_width()/2., 1.05*height, '%1.2f' % float(height), ha='center', va='bottom')
@@ -71,14 +75,14 @@ if not os.path.exists(directory):
 cores_combinations = [ range(0, 8), range(0, 4), range(4, 8), [0,4], [0,1,4,5], [0,1,2,4,5,6]]
 cores_number = [len(x) for x in cores_combinations]
 
-# Define lists used for the timings plot.
+# Define some lists used for the timings plot.
 labels = ['8 cores', '4 smalls', '4 bigs', '1 + 1', '2 + 2', '3 + 3']
 steps = ['Assemble', 'FunctionSpace', 'Solve', 'Total']
 cores = [None] * (len(cores_combinations) * len(steps))
 stages = [None] * (len(cores_combinations) * len(steps))
 values = np.zeros(len(cores_combinations) * len(steps))
 
-# Define lists for the energy consumption plot.
+# Define some lists for the energy consumption plot.
 wh_steps = ['Watthour consumed ','Average current drawn (A) ']
 wh_cores = [None] * (len(cores_combinations) * len(wh_steps))
 wh_stages = [None] * (len(cores_combinations) * len(wh_steps))
@@ -100,7 +104,6 @@ for i, label in enumerate(labels):
 print('Extracting the watthour measures from file...')
 wh = file_to_float('output/wh_measures.txt')
 
-
 for n, wh_label in enumerate(labels):
     for k, wh_step in enumerate(wh_steps):
         wh_cores[n*len(wh_steps) + k] = wh_label
@@ -112,15 +115,16 @@ for n, wh_label in enumerate(labels):
 
 print("Results have been extracted.")
 
-# Define DataFrame object.
+# Define DataFrame objects.
 dft = pd.DataFrame({'Cores': cores, 'Stages': stages, 'Timing': values}, columns = ['Cores', 'Stages', 'Timing'])
 print("DataFrame object (timings)  has been created.")
 dfwh = pd.DataFrame({'Cores': wh_cores, 'Measures': wh_stages, 'Values': wh_values}, columns = ['Cores', 'Measures', 'Values'])
 print("DataFrame object (energy consumption) has been created.")
 
-# Plot 'total_&_stages_timings'
 sns.set_context("paper")
 colors = sns.color_palette("muted")
+
+# Plot 'total_&_stages_timings'
 ax = sns.barplot(x='Cores', y='Timing', hue='Stages', data=dft, palette=colors)
 ax.set_title('Total & Stages Timings')
 add_value_to_plot(ax)
@@ -129,8 +133,9 @@ plt.ylabel(r"Wall time (s)")
 plt.savefig("output/pdf/total_&_stages_timings.pdf", bbox_inches='tight')
 print("Done, 'total_&_stages_timings' has been saved to pdf.")
 
-# Plot 'energy_consumption'.
 plt.clf()
+
+# Plot 'energy_consumption'.
 ax = sns.barplot(x='Cores', y='Values', hue='Measures', data=dfwh, palette=colors)
 ax.set_title('Energy consumption of various core combinations')
 add_value_to_plot(ax)
