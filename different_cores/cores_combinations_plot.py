@@ -7,7 +7,7 @@ import os
 
 import numpy as np
 import seaborn as sns
-import matplotlib.py plot as plt
+import matplotlib.pyplot as plt
 
 import xmltodict
 import pandas as pd
@@ -63,7 +63,7 @@ def add_value_to_plot(ax):
     """ Add the value above the bars."""
     for p in ax.patches:
         height = p.get_height()
-        ax.text(p.get_x()+p.get_width()/2., 1.05*height, '%1.2f' % float(height), ha='center', va='bottom')
+        ax.text(p.get_x()+p.get_width()/2., 1.05*height, '%1.1f' % float(height), ha='center', va='bottom')
 
 
 # Create directory to store pdf files.
