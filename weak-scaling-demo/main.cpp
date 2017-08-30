@@ -375,6 +375,11 @@ int main(int argc, char *argv[])
 	 dofsvalue.set("Per core", "reps", 1);
   	 dofsfile << dofsvalue;}
 
+  std::string filename2 = output_dir + "/output/partitions/partitions.xdmf";
+  XDMFFile file2(filename2);
+  CellFunction<std::size_t> partitioning(mesh, dolfin::MPI::rank(mesh->mpi_comm()));
+  file2.write(partitioning);
+
   list_timings(TimingClear::clear, {TimingType::wall});
 
   return 0;
